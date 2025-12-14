@@ -1,0 +1,17 @@
+# Core dependencies for Stable Diffusion image generation
+diffusers==0.25.0
+transformers==4.36.0
+accelerate==0.25.0
+
+# PyTorch with CUDA support (Windows)
+# Install separately: pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Additional utilities
+safetensors==0.4.1
+Pillow==10.1.0
+numpy==1.24.3
+
+# Optional but recommended
+invisible-watermark>=0.2.0
