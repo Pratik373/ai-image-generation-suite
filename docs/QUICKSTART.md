@@ -25,7 +25,11 @@ Paste your token from: https://huggingface.co/settings/tokens
 ### 4️⃣ Generate Your First Image
 
 ```bash
+# Text-to-Image (Create new images)
 python generate_image.py
+
+# Image-to-Image (Modify existing images) - NEW!
+python simple_img2img.py
 ```
 
 ---
@@ -136,11 +140,13 @@ huggingface-cli whoami
 
 ```
 Image Model/
-├── generate_image.py    ← Main script (edit this!)
+├── generate_image.py    ← Text-to-Image script
+├── simple_img2img.py    ← Image-to-Image script (NEW!)
 ├── requirements.txt     ← Dependencies
-├── outputs/            ← Your images appear here
+├── outputs/            ← Generated images
+├── img2img_outputs/    ← Modified images
 ├── README.md           ← Full documentation
-└── SETUP_GUIDE.md      ← Detailed setup
+└── docs/               ← Detailed guides
 ```
 
 ---

@@ -46,15 +46,17 @@ This project provides a **beginner-friendly yet production-quality** toolkit for
 
 ### 🎯 Core Capabilities
 
-| Feature              | Description                                   |
-| -------------------- | --------------------------------------------- |
-| **Text-to-Image**    | Generate images from text descriptions        |
-| **Image-to-Image**   | Modify existing images with AI                |
-| **Multiple Models**  | Stable Diffusion v1.5, SDXL, Kandinsky 2.2    |
-| **GPU Optimized**    | FP16 precision, attention slicing, VAE tiling |
-| **Auto-caching**     | Models download once, cached forever          |
-| **Interactive CLI**  | User-friendly command-line interface          |
-| **Batch Processing** | Generate multiple variations easily           |
+| Feature                 | Description                                      |
+| ----------------------- | ------------------------------------------------ |
+| **Text-to-Image**       | Generate images from text descriptions           |
+| **Image-to-Image** ⭐   | Modify existing images with AI (Fast & Reliable) |
+| **Multiple Models**     | Stable Diffusion v1.5, SDXL, Kandinsky 2.2       |
+| **GPU Optimized**       | FP16 precision, attention slicing, VAE tiling    |
+| **CPU Offloading**      | Works on 6GB VRAM with memory optimization       |
+| **Auto-caching**        | Models download once, cached forever             |
+| **Interactive CLI**     | User-friendly command-line interface             |
+| **Batch Processing**    | Generate multiple variations easily              |
+| **Auto Image Resizing** | Prevents OOM by resizing large images            |
 
 ### 🔧 Technical Features
 
@@ -133,10 +135,13 @@ huggingface-cli login
 ### First Run (30 seconds)
 
 ```bash
-# For Stable Diffusion
+# For Text-to-Image (Stable Diffusion)
 python generate_image.py
 
-# For Kandinsky (with image-to-image)
+# For Image-to-Image (Stable Diffusion) ⭐ NEW & RECOMMENDED
+python simple_img2img.py
+
+# For Kandinsky (slower, more artistic)
 python kandinsky_img2img.py
 ```
 
@@ -226,6 +231,38 @@ Negative: blurry, low quality
 ✅ Image generated in 20 seconds!
 ```
 
+### Stable Diffusion - Image-to-Image ⭐ NEW
+
+```bash
+python simple_img2img.py
+```
+
+**Interactive prompts**:
+
+1. Drag & drop your source image (or paste path)
+2. Enter modification prompt
+3. Enter negative prompt (optional)
+4. Choose strength (0.0-1.0)
+5. Wait for generation
+6. Image auto-opens and saves to `img2img_outputs/`
+
+**Example session**:
+
+```
+Image path: C:\Users\YourName\Pictures\photo.jpg
+Prompt: make it look like an oil painting, vibrant colors
+Negative: (press Enter for default)
+Strength: 0.7
+✅ Image modified in 15 seconds!
+```
+
+**Strength Guide**:
+
+- `0.3` = Subtle changes (lighting, colors)
+- `0.5` = Moderate changes (add/remove elements)
+- `0.7` = Strong changes (style transformation)
+- `0.9` = Extreme changes (almost new image)
+
 ### Kandinsky - Image-to-Image
 
 ```bash
@@ -255,7 +292,7 @@ Strength: 0.7
 **Edit generation parameters** in the scripts:
 
 ```python
-# In generate_image.py or kandinsky_img2img.py
+# In generate_image.py or simple_img2img.py
 
 NUM_INFERENCE_STEPS = 50    # Higher = better quality (20-100)
 GUIDANCE_SCALE = 7.5        # How closely to follow prompt (4-12)
@@ -270,20 +307,28 @@ IMAGE_WIDTH = 512           # Output width (384, 512, 768)
 ```
 ai-image-generation-suite/
 ├── 📄 README.md                    # This file
+├── 📄 LICENSE                      # MIT License
+├── 📄 CONTRIBUTING.md              # Contribution guidelines
+├── 📄 GITHUB_PUSH_GUIDE.md         # GitHub setup guide
 ├── 📄 requirements.txt             # Python dependencies
 ├── 📄 .gitignore                   # Git ignore rules
 │
-├── 🐍 generate_image.py            # Stable Diffusion script
-├── 🐍 kandinsky_img2img.py         # Kandinsky script
+├── 🐍 generate_image.py            # Stable Diffusion (Text-to-Image)
+├── 🐍 simple_img2img.py            # Stable Diffusion (Image-to-Image) ⭐ NEW
+├── 🐍 kandinsky_img2img.py         # Kandinsky (Text & Image-to-Image)
 │
 ├── 📁 docs/                        # Documentation
 │   ├── SETUP_GUIDE.md             # Detailed setup instructions
 │   ├── QUICKSTART.md              # Quick reference guide
 │   └── KANDINSKY_GUIDE.md         # Kandinsky usage guide
 │
-├── 📁 outputs/                     # Generated images (auto-created)
-│   ├── generated_*.png            # Output images
+├── 📁 outputs/                     # Text-to-Image outputs
+│   ├── generated_*.png            # Generated images
 │   └── generated_*_prompt.txt     # Prompt metadata
+│
+├── 📁 img2img_outputs/             # Image-to-Image outputs ⭐ NEW
+│   ├── img2img_*.png              # Modified images
+│   └── img2img_*_prompt.txt       # Modification prompts
 │
 └── 📁 assets/                      # Project assets (optional)
     └── examples/                   # Example images

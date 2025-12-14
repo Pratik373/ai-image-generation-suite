@@ -59,6 +59,14 @@ outputs/*.webp
 outputs/*.txt
 !outputs/.gitkeep
 
+# Image-to-Image outputs
+img2img_outputs/*.png
+img2img_outputs/*.jpg
+img2img_outputs/*.jpeg
+img2img_outputs/*.webp
+img2img_outputs/*.txt
+!img2img_outputs/.gitkeep
+
 # Datasets
 data/
 datasets/
