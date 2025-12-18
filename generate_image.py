@@ -207,6 +207,18 @@ def load_model(device, dtype):
         
         print("✅ Model loaded successfully!")
         
+        # Check for LoRA weights
+        lora_path = Path("lora_output")
+        if lora_path.exists() and (lora_path / "pytorch_lora_weights.safetensors").exists():
+            print("\n" + "=" * 70)
+            print("🧩 CUSTOM MODEL DETECTED")
+            print("=" * 70)
+            use_lora = input("Found trained LoRA weights. Use them? (y/n) [y]: ").strip().lower()
+            if use_lora != 'n':
+                print(f"📦 Loading LoRA from {lora_path}...")
+                pipe.load_lora_weights(str(lora_path))
+                print("✅ LoRA weights active!")
+        
         return pipe
         
     except Exception as e:
