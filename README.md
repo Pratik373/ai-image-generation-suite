@@ -50,7 +50,8 @@ This project provides a **beginner-friendly yet production-quality** toolkit for
 | ----------------------- | ------------------------------------------------ |
 | **Text-to-Image**       | Generate images from text descriptions           |
 | **Image-to-Image** ⭐   | Modify existing images with AI (Fast & Reliable) |
-| **Multiple Models**     | Stable Diffusion v1.5, SDXL, Kandinsky 2.2       |
+| **LoRA Fine-Tuning** 🆕 | Train custom models on your own images           |
+| **Multiple Models**     | Stable Diffusion v1.5 (with LoRA support), SDXL  |
 | **GPU Optimized**       | FP16 precision, attention slicing, VAE tiling    |
 | **CPU Offloading**      | Works on 6GB VRAM with memory optimization       |
 | **Auto-caching**        | Models download once, cached forever             |
@@ -87,21 +88,18 @@ This project provides a **beginner-friendly yet production-quality** toolkit for
 - **Best For**: High-quality, detailed images
 - **Use Case**: Professional artwork, detailed scenes, high resolution
 
-### 3. **Kandinsky 2.2**
+### 3. **Custom LoRA Models**
 
-- **Size**: ~10GB
-- **Speed**: ⚡⚡ Moderate (30-60s per image)
-- **Quality**: ⭐⭐⭐⭐⭐ Outstanding
-- **Best For**: Artistic images, image-to-image transformations
-- **Use Case**: Art styles, photo modifications, creative edits
+- **Type**: Fine-tuned adaptations
+- **Best For**: Specific concepts, faces, or styles you trained
+- **Usage**: Select "Option 1" in generation menu
 
 ### Model Comparison
 
-| Model             | Text-to-Image | Image-to-Image | Photorealism | Artistic   | Speed  |
-| ----------------- | ------------- | -------------- | ------------ | ---------- | ------ |
-| **SD v1.5**       | ✅            | ❌             | ⭐⭐⭐⭐     | ⭐⭐⭐     | ⚡⚡⚡ |
-| **SDXL**          | ✅            | ❌             | ⭐⭐⭐⭐⭐   | ⭐⭐⭐⭐   | ⚡⚡   |
-| **Kandinsky 2.2** | ✅            | ✅             | ⭐⭐⭐⭐     | ⭐⭐⭐⭐⭐ | ⚡⚡   |
+| Model       | Text-to-Image | LoRA Support | Photorealism | Speed  |
+| ----------- | ------------- | ------------ | ------------ | ------ |
+| **SD v1.5** | ✅            | ✅           | ⭐⭐⭐⭐     | ⚡⚡⚡ |
+| **SDXL**    | ✅            | ❌           | ⭐⭐⭐⭐⭐   | ⚡⚡   |
 
 ---
 
@@ -216,16 +214,19 @@ python generate_image.py
 
 **Interactive prompts**:
 
-1. Choose model (SD v1.5 or SDXL)
-2. Enter your text prompt
-3. Enter negative prompt (optional)
-4. Wait for generation
-5. Image auto-opens and saves to `outputs/`
+1.  **Choose model**:
+    - `1`: SD v1.5 + Custom LoRA (if trained)
+    - `2`: SD v1.5 (Standard/Clean)
+    - `3`: SDXL Base 1.0 (High Quality)
+2.  Enter your text prompt
+3.  Enter negative prompt (optional)
+4.  Wait for generation
+5.  Image auto-opens and saves to `outputs/` or `lora_outputs/`
 
 **Example session**:
 
 ```
-Which model? 1 (SD v1.5)
+Which model? 1 (SD v1.5 + Custom LoRA)
 Prompt: a beautiful sunset over mountains, highly detailed, 8k
 Negative: blurry, low quality
 ✅ Image generated in 20 seconds!
@@ -265,27 +266,7 @@ Strength: 0.7
 
 ### Kandinsky - Image-to-Image
 
-```bash
-python kandinsky_img2img.py
-```
-
-**Interactive prompts**:
-
-1. Choose mode (Text-to-Image or Image-to-Image)
-2. Enter your prompt
-3. For img2img: Select source image and strength
-4. Wait for generation
-5. Image auto-opens and saves
-
-**Example session**:
-
-```
-Mode: 2 (Image-to-Image)
-Prompt: transform into oil painting style, vibrant colors
-Image: C:\Users\YourName\Pictures\photo.jpg
-Strength: 0.7
-✅ Image modified in 45 seconds!
-```
+_(Removed in favor of optimized Stable Diffusion workflow)_
 
 ### Advanced Usage
 
@@ -302,6 +283,41 @@ IMAGE_WIDTH = 512           # Output width (384, 512, 768)
 
 ---
 
+## 🎓 LoRA Fine-Tuning (New!)
+
+Train your own custom AI model on a specific face, object, or style using **Low-Rank Adaptation (LoRA)**.
+
+### Step 1: Prepare Dataset
+
+1.  Create a folder named `dataset` in the project root.
+2.  Add your training images (5-20 images recommended).
+    - Supported: JPG, PNG, WEBP
+3.  Create a text file for each image (same name) with a caption.
+    - `image1.jpg` -> `image1.txt` ("a photo of [trigger_word] person")
+    - `image2.jpg` -> `image2.txt` ("a side profile of [trigger_word] person")
+
+### Step 2: Train Model
+
+Run the automated training script:
+
+```bash
+python train_lora.py
+```
+
+- **Time**: ~10-20 minutes on RTX 4050
+- **VRAM**: Optimized for 8GB
+- **Output**: Saved to `lora_output/`
+
+### Step 3: Generate Images
+
+Once trained, use your model:
+
+1.  Run `python generate_image.py`
+2.  Select **Option 1** (SD v1.5 + Custom LoRA)
+3.  Include your **trigger word** in the prompt!
+
+---
+
 ## 📁 Project Structure
 
 ```
@@ -313,25 +329,23 @@ ai-image-generation-suite/
 ├── 📄 requirements.txt             # Python dependencies
 ├── 📄 .gitignore                   # Git ignore rules
 │
-├── 🐍 generate_image.py            # Stable Diffusion (Text-to-Image)
-├── 🐍 simple_img2img.py            # Stable Diffusion (Image-to-Image) ⭐ NEW
-├── 🐍 kandinsky_img2img.py         # Kandinsky (Text & Image-to-Image)
+├── 🐍 generate_image.py            # Main Generator (Text-to-Image + LoRA)
+├── 🐍 simple_img2img.py            # Image-to-Image Tool
+├── 🐍 train_lora.py                # LoRA Training Script 🆕
+│
+├── 📁 dataset/                     # Your training images go here
+│
+├── 📁 outputs/                     # Standard Model Outputs
+├── 📁 lora_output/                 # Trained LoRA Model Weights
+├── 📁 lora_outputs/                # Images generated with LoRA
+├── 📁 img2img_outputs/             # Image-to-Image Outputs
 │
 ├── 📁 docs/                        # Documentation
 │   ├── SETUP_GUIDE.md             # Detailed setup instructions
 │   ├── QUICKSTART.md              # Quick reference guide
-│   └── KANDINSKY_GUIDE.md         # Kandinsky usage guide
-│
-├── 📁 outputs/                     # Text-to-Image outputs
-│   ├── generated_*.png            # Generated images
-│   └── generated_*_prompt.txt     # Prompt metadata
-│
-├── 📁 img2img_outputs/             # Image-to-Image outputs ⭐ NEW
-│   ├── img2img_*.png              # Modified images
-│   └── img2img_*_prompt.txt       # Modification prompts
+│   └── DATASET_GUIDE.md           # Dataset formatting guide 🆕
 │
 └── 📁 assets/                      # Project assets (optional)
-    └── examples/                   # Example images
 ```
 
 ---
@@ -340,13 +354,12 @@ ai-image-generation-suite/
 
 ### RTX 4050 (8GB VRAM) - Tested Configuration
 
-| Model     | Resolution | Steps | Time   | VRAM Usage |
-| --------- | ---------- | ----- | ------ | ---------- |
-| SD v1.5   | 512×512    | 30    | 15-20s | ~4GB       |
-| SD v1.5   | 768×768    | 30    | 30-40s | ~6GB       |
-| SDXL      | 512×512    | 30    | 30-45s | ~6GB       |
-| SDXL      | 768×768    | 30    | 60-90s | ~7.5GB     |
-| Kandinsky | 512×512    | 50    | 30-60s | ~5GB       |
+| Model          | Resolution | Steps | Time   | VRAM Usage |
+| -------------- | ---------- | ----- | ------ | ---------- |
+| SD v1.5        | 512×512    | 30    | 15-20s | ~4GB       |
+| SD v1.5 (LoRA) | 512×512    | 30    | 15-20s | ~4GB       |
+| SDXL           | 512×512    | 30    | 30-45s | ~6GB       |
+| SDXL           | 768×768    | 30    | 60-90s | ~7.5GB     |
 
 ### Optimization Features
 
@@ -542,7 +555,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 📊 Project Stats
 
-- **Models**: 3 (SD v1.5, SDXL, Kandinsky 2.2)
+- **Models**: Stable Diffusion v1.5, SDXL Base 1.0
 - **Features**: Text-to-Image, Image-to-Image
 - **Lines of Code**: ~800
 - **Documentation**: 4 comprehensive guides
