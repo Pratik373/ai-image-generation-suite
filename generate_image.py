@@ -28,10 +28,10 @@ OUTPUT_DIR = Path("outputs")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 # Generation parameters (optimized for RTX 4050)
-NUM_INFERENCE_STEPS = 30  # Higher = better quality but slower (20-50 recommended)
+NUM_INFERENCE_STEPS = 20  # Higher = better quality but slower (20-50 recommended)
 GUIDANCE_SCALE = 7.5      # How closely to follow prompt (7-12 recommended)
-IMAGE_HEIGHT = 512        # Must be divisible by 8
-IMAGE_WIDTH = 512         # Must be divisible by 8
+IMAGE_HEIGHT = 1024        # Must be divisible by 8
+IMAGE_WIDTH = 1024         # Must be divisible by 8
 
 # ============================================================================
 # HUGGING FACE AUTHENTICATION
